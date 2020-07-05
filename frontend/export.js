@@ -40,6 +40,10 @@ function RecordListItem ({table, recordId}) {
       <Text style={{color: 'red'}}>Error: Must countain a field name Location, with latitude,longitude</Text>
     )
   }
+  if (typeof location !== 'string' && Array.isArray(location) && location.length > 0) {
+    // handle special case where the Location field is a lookup
+    location = location[0]
+  }
   const locationParts = location.split(',')
   let feature
   let lat
