@@ -29,7 +29,17 @@ function onDownloadGeoJSON (features, name) {
 
 function RecordListItem ({table, recordId}) {
   const record = useRecordById(table, recordId)
-  const location = record.getCellValue('Location')
+  let location
+  try {
+    location = record.getCellValue('Location')
+  } catch (err) {
+    console.log(err.message)
+  }
+  if (!location) {
+    return (
+      <Text style={{color: 'red'}}>Error: Must countain a field name Location, with latitude,longitude</Text>
+    )
+  }
   const locationParts = location.split(',')
   let feature
   let lat
