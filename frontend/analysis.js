@@ -19,6 +19,16 @@ export default function AnalysisForm () {
   const targetRecords = useRecords(targetTable)
   const inputRecords = useRecords(inputTable)
 
+  async function handleReset () {
+    setLoading(false)
+    setComplete(false)
+    setError(false)
+    setProgress(0)
+    setTargetTable(null)
+    setInputTable(null)
+    setTargetField(null)
+  }
+
   async function runNearest () {
     setLoading(true)
 
@@ -175,7 +185,7 @@ export default function AnalysisForm () {
             <div>
               <Text>Process Complete!</Text>
               <Button
-                onClick={() => console.log('Button clicked')}
+                onClick={handleReset}
                 icon='redo'
               >
                 Reset
