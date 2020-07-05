@@ -4,6 +4,8 @@ Import map data to link to your data, open locations in Google Maps or on your p
 
 ![Screenshot](/screenshot.jpg)
 
+Airtable Blocks Contest Submission https://devpost.com/software/map-data-tools
+
 ## License
 
 see LICENSE.md
