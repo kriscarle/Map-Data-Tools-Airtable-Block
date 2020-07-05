@@ -3,26 +3,26 @@
     "author": "Kris Carle",
     "license": "MIT",
     "dependencies": {
-        "@airtable/blocks": "0.0.51",
+        "@airtable/blocks": "0.0.53",
         "@maphubs/tokml": "^0.5.2",
         "@turf/centroid": "^6.0.2",
         "@turf/distance": "^6.0.1",
         "bluebird": "^3.7.2",
         "downloadjs": "^1.4.7",
-        "react": "^16.13.0",
-        "react-dom": "^16.13.0",
+        "react": "^16.13.1",
+        "react-dom": "^16.13.1",
         "react-qr-svg": "^2.2.2",
         "shpjs": "^3.5.0"
     },
     "devDependencies": {
-        "eslint": "^6.8.0",
+        "eslint": "^7.4.0",
         "eslint-config-standard": "^14.1.1",
         "eslint-config-standard-react": "^9.2.0",
         "eslint-plugin-import": "^2.22.0",
         "eslint-plugin-node": "^11.1.0",
         "eslint-plugin-promise": "^4.2.1",
-        "eslint-plugin-react": "^7.18.3",
-        "eslint-plugin-react-hooks": "^2.5.0",
+        "eslint-plugin-react": "^7.20.3",
+        "eslint-plugin-react-hooks": "^4.0.5",
         "eslint-plugin-standard": "^4.0.1"
     },
     "scripts": {
