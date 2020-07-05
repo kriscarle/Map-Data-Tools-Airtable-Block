@@ -61,6 +61,16 @@ export default function ImportForm () {
     reader.readAsText(file)
   }
 
+  async function handleReset () {
+    setLoading(false)
+    setComplete(false)
+    setError(false)
+    setProgress(0)
+    setGeoJSON(undefined)
+    setTableName(undefined)
+    setNameField(undefined)
+  }
+
   async function createTable () {
     const fields = []
     // id field
@@ -262,7 +272,7 @@ export default function ImportForm () {
         <div>
           <Text>Import Complete!</Text>
           <Button
-            onClick={() => console.log('Button clicked')}
+            onClick={handleReset}
             icon='redo'
           >
             Import a New File
