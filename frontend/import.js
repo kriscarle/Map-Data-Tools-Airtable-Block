@@ -202,6 +202,7 @@ export default function ImportForm () {
           <Label htmlFor='map-data-import'>Upload a Shapefile (.zip) or GeoJSON (.geojson)</Label>
           <Input
             id='map-data-import' type='file' onChange={() => {
+              setError(false)
               const selectedFile = document.getElementById('map-data-import').files[0]
               const fileNameParts = selectedFile.name.split('.')
               const fileNameWithoutExt = fileNameParts[0]
