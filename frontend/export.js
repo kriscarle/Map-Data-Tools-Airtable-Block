@@ -10,6 +10,8 @@ import {
   Box, Text, Heading, RecordCard, TablePicker, ViewPicker, Link, Button, Switch, Tooltip
 } from '@airtable/blocks/ui'
 
+import SelectedTableExport from '../components/SelectedTableExport'
+
 function onDownloadKML (features, name) {
   const geoJSON = {
     type: 'FeatureCollection',
@@ -37,7 +39,7 @@ function RecordListItem ({table, recordId}) {
   }
   if (!location) {
     return (
-      <Text style={{color: 'red'}}>Error: Must countain a field name Location, with latitude,longitude</Text>
+      <Text style={{color: 'red'}}>Error: Must countain a field named Location, with latitude,longitude</Text>
     )
   }
   if (typeof location !== 'string' && Array.isArray(location) && location.length > 0) {
@@ -119,79 +121,6 @@ function RecordListItem ({table, recordId}) {
   )
 }
 
-function getGeoJSONFromRecords (records, fields) {
-  return records.map(record => {
-    const location = record.getCellValue('Location')
-    const locationParts = location.split(',')
-    const properties = {name: record.name}
-
-    fields.forEach(field => {
-      const name = field.name
-      if (name !== 'Cache' && name !== 'Location') { properties[name] = record.getCellValue(name) }
-    })
-    if (locationParts.length === 2) {
-      const lat = parseFloat(locationParts[0])
-      const lon = parseFloat(locationParts[1])
-      return {
-        type: 'Feature',
-        properties,
-        geometry: {
-          type: 'Point',
-          coordinates: [lon, lat]
-        }
-      }
-    } else {
-      return null
-    }
-  })
-}
-
-function SelectedViewItem ({table, view}) {
-  const [includeFields, setIncludeFields] = useState(false)
-  const records = useRecords(table)
-  const viewMetadata = useViewMetadata(view)
-  const fields = includeFields ? viewMetadata.visibleFields : []
-  return (
-    <>
-      <div style={{margin: '10px'}}>
-        <Tooltip
-          content='Including all data may fail for very large tables'
-          placementX={Tooltip.placements.CENTER}
-          placementY={Tooltip.placements.BOTTOM}
-          shouldHideTooltipOnClick
-        >
-          <Switch
-            value={includeFields}
-            onChange={newValue => setIncludeFields(newValue)}
-            label='Include All Fields'
-            width='320px'
-          />
-        </Tooltip>
-      </div>
-      <div style={{margin: '10px'}}>
-        <Button
-          onClick={() => {
-            const features = getGeoJSONFromRecords(records, fields)
-            onDownloadKML(features, table.name)
-          }} icon='download'
-        >
-          Download KML (Google Earth)
-        </Button>
-      </div>
-      <div style={{margin: '10px'}}>
-        <Button
-          onClick={() => {
-            const features = getGeoJSONFromRecords(records, fields)
-            onDownloadGeoJSON(features, table.name)
-          }} icon='download'
-        >
-          Download GeoJSON
-        </Button>
-      </div>
-    </>
-  )
-}
-
 export default function ExportForm () {
   // load selected records and fields
   useLoadable(cursor)
@@ -244,7 +173,7 @@ export default function ExportForm () {
           width='100%'
         />
         {(selectedTable && selectedView) &&
-          <SelectedViewItem table={selectedTable} view={selectedView} />}
+          <SelectedTableExport table={selectedTable} view={selectedView} />}
       </Box>
     </div>
   )
