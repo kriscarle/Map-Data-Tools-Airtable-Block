@@ -1,125 +1,13 @@
 import React, { useState } from 'react'
 import {base, cursor} from '@airtable/blocks'
 
-import download from 'downloadjs'
-import tokml from '@maphubs/tokml'
-import { QRCode } from 'react-qr-svg'
-
 import {
-  useLoadable, useWatchable, useRecordById, useViewMetadata, useRecords,
-  Box, Text, Heading, RecordCard, TablePicker, ViewPicker, Link, Button, Switch, Tooltip
+  useLoadable, useWatchable,
+  Box, Text, Heading, TablePicker, ViewPicker
 } from '@airtable/blocks/ui'
 
 import SelectedTableExport from '../components/SelectedTableExport'
-
-function onDownloadKML (features, name) {
-  const geoJSON = {
-    type: 'FeatureCollection',
-    features
-  }
-  const kml = tokml(geoJSON)
-  download(`data:text/xml;charset=utf-8,${kml}`, `${name}.kml`, 'text/xml')
-}
-
-function onDownloadGeoJSON (features, name) {
-  const geoJSON = {
-    type: 'FeatureCollection',
-    features
-  }
-  download(`data:application/json;charset=utf-8,${JSON.stringify(geoJSON)}`, `${name}.geojson`, 'application/json')
-}
-
-function RecordListItem ({table, recordId}) {
-  const record = useRecordById(table, recordId)
-  let location
-  try {
-    location = record.getCellValue('Location')
-  } catch (err) {
-    console.log(err.message)
-  }
-  if (!location) {
-    return (
-      <Text style={{color: 'red'}}>Error: Must countain a field named Location, with latitude,longitude</Text>
-    )
-  }
-  if (typeof location !== 'string' && Array.isArray(location) && location.length > 0) {
-    // handle special case where the Location field is a lookup
-    location = location[0]
-  }
-  const locationParts = location.split(',')
-  let feature
-  let lat
-  let lon
-  if (locationParts.length === 2) {
-    lat = parseFloat(locationParts[0])
-    lon = parseFloat(locationParts[1])
-    feature = {
-      type: 'Feature',
-      properties: {},
-      geometry: {
-        type: 'Point',
-        coordinates: [lon, lat]
-      }
-    }
-  }
-
-  return (
-    <>
-      <RecordCard record={record} />
-      {!feature &&
-        <Text>Error: Record must have a Location field.</Text>}
-      {feature &&
-        <div style={{position: 'relative', padding: '10px 5px'}}>
-          <div style={{width: '300px'}}>
-            <div style={{marginBottom: '5px'}}>
-              <Link
-                href={`https://www.openstreetmap.org/#map=12/${lat}/${lon}`}
-                target='_blank'
-                icon='mapPin'
-              >
-                OpenStreetMap
-              </Link>
-            </div>
-            <div style={{marginBottom: '5px'}}>
-              <Link
-                href={`https://www.google.com/maps/@${lat},${lon},12z`}
-                target='_blank'
-                icon='mapPin'
-              >
-                Google Maps
-              </Link>
-            </div>
-            <div style={{marginBottom: '5px'}}>
-              <Button onClick={() => onDownloadKML([feature], record.name)} icon='download'>
-                Download KML (Google Earth)
-              </Button>
-            </div>
-            <div style={{marginBottom: '5px'}}>
-              <Button onClick={() => onDownloadGeoJSON([feature], record.name)} icon='download'>
-                Download GeoJSON
-              </Button>
-            </div>
-          </div>
-          <div style={{width: '64px'}}>
-            <Tooltip
-              content='Scan with your phone to open in Apple Maps or Google Maps'
-              placementX={Tooltip.placements.CENTER}
-              placementY={Tooltip.placements.BOTTOM}
-              shouldHideTooltipOnClick
-            >
-              <QRCode
-                bgColor='#FFFFFF'
-                fgColor='#000000'
-                level='L'
-                style={{ width: 64 }}
-                value={`geo:${lat},${lon}`}
-              />
-            </Tooltip>
-          </div>
-        </div>}
-    </>
-  )
-}
+import SelectedRecordExport from '../components/SelectedRecordExport'
 
 export default function ExportForm () {
   // load selected records and fields
@@ -147,7 +35,7 @@ export default function ExportForm () {
         {!selectedRecordId &&
           <Text>Select a record from a table with a &quot;Location&quot; field</Text>}
         {selectedRecordId &&
-          <RecordListItem table={table} recordId={selectedRecordId} />}
+          <SelectedRecordExport table={table} recordId={selectedRecordId} />}
       </Box>
       <div style={{width: '100%', textAlign: 'center'}}>
         <Heading size='small'>OR</Heading>
