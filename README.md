@@ -2,9 +2,9 @@
 
 Import map data to link to your data, open locations in Google Maps or on your phone with a QR code, find locations nearby other locations by comparing tables, export data to Google Earth, and more.
 
-![Screenshot](/screenshot.jpg)
+![Screenshot](./example.gif)
 
-Airtable Blocks Contest Submission https://devpost.com/software/map-data-tools
+For a complete demo, see the Airtable Blocks Contest submission at https://devpost.com/software/map-data-tools
 
 ## How to remix this block
 
